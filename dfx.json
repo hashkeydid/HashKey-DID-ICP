@@ -1,7 +1,7 @@
 {
   "canisters": {
     "hello_world_backend": {
-      "candid": "src/hello_world_backend/did.did",
+      "candid": "src/hello_world_backend/hashkeydid.did",
       "package": "hello_world_backend",
       "type": "rust"
     }
