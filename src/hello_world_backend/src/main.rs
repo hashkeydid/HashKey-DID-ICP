@@ -292,7 +292,8 @@ mod ledger {
             if b_did[b_did.len() - 4] != 46 || // .
                 b_did[b_did.len() - 3] != 105 || // i
                 b_did[b_did.len() - 2] != 99 || // c
-                b_did[b_did.len() - 1] != 112 // p
+                b_did[b_did.len() - 1] != 112
+            // p
             {
                 return false;
             }
@@ -547,8 +548,8 @@ fn dip721_token_metadata(
     ledger::with(|ledger| ManualReply::one(ledger.token_metadata(&token_identifier)))
 }
 
-//#[update(guard = "is_canister_custodian")]
-#[update]
+#[update(guard = "is_canister_custodian")]
+// #[update]
 #[candid_method(update)]
 fn dip721_mint(
     to: Principal,
@@ -562,12 +563,13 @@ fn dip721_mint(
             .not()
             .then_some(())
             .ok_or(NftError::ExistedNFT)?;
-        if let Ok(token_identifiers) = ledger.owner_token_identifiers(&to) {
-            let count = Nat::from(token_identifiers.len());
-            (count > Nat::from(0))
-                .then_some(())
-                .ok_or(NftError::AlreadyClaim)?;
-        }
+        ledger
+            .addr_to_tokenid
+            .contains_key(&to)
+            .not()
+            .then_some(())
+            .ok_or(NftError::AlreadyClaim)?;
+
         let mut did: Option<String> = None;
         for (key, value) in &properties {
             if key == "did" {

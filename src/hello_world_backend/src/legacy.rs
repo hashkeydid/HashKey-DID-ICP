@@ -127,8 +127,8 @@ fn token_metadata(
     dip721_token_metadata(token_identifier)
 }
 
-//#[update(name = "mint", guard = "is_canister_custodian")]
-#[update(name = "mint")]
+#[update(name = "mint", guard = "is_canister_custodian")]
+// #[update(name = "mint")]
 #[candid_method(update, rename = "mint")]
 fn mint(
     to: Principal,
